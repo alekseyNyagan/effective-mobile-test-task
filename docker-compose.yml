@@ -6,6 +6,12 @@ services:
       args:
         DOCKER_BUILDKIT: 1
     restart: "no"
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: bank_cards_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     ports:
       - "8080:8080"
     depends_on:
