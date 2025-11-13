@@ -1,0 +1,200 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1763029072799-1
+      author: aleksey (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            sequenceName: card_seq
+            startValue: 1
+  - changeSet:
+      id: 1763029072799-2
+      author: aleksey (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            sequenceName: role_seq
+            startValue: 1
+  - changeSet:
+      id: 1763029072799-3
+      author: aleksey (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createSequence:
+            incrementBy: 50
+            sequenceName: user_account_seq
+            startValue: 1
+  - changeSet:
+      id: 1763029072799-4
+      author: aleksey (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_card
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: card_number
+                  type: VARCHAR(15)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: last_4
+                  type: VARCHAR(4)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: expiry
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: money_amount
+                  type: DECIMAL(19, 2)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: status
+                  type: VARCHAR(50)
+              - column:
+                  name: user_id
+                  type: BIGINT
+            tableName: card
+  - changeSet:
+      id: 1763029072799-5
+      author: aleksey (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_role
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(255)
+            tableName: role
+  - changeSet:
+      id: 1763029072799-6
+      author: aleksey (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_user_account
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: phone_number
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: password
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: surname
+                  type: VARCHAR(255)
+            tableName: user_account
+  - changeSet:
+      id: 1763029072799-7
+      author: aleksey (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_user_account_roles
+                  name: roles_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_user_account_roles
+                  name: user_id
+                  type: BIGINT
+            tableName: user_account_roles
+  - changeSet:
+      id: 1763029072799-8
+      author: aleksey (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: card_number
+            constraintName: UC_CARD_CARD_NUMBER
+            tableName: card
+  - changeSet:
+      id: 1763029072799-9
+      author: aleksey (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: phone_number
+            constraintName: uc_943bc6a30692d466728b06715
+            tableName: user_account
+  - changeSet:
+      id: 1763029072799-10
+      author: aleksey (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: card
+            constraintName: FK_CARD_ON_USER
+            referencedColumnNames: id
+            referencedTableName: user_account
+  - changeSet:
+      id: 1763029072799-11
+      author: aleksey (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: roles_id
+            baseTableName: user_account_roles
+            constraintName: FK_USEACCROL_ON_ROLE
+            referencedColumnNames: id
+            referencedTableName: role
+  - changeSet:
+      id: 1763029072799-12
+      author: aleksey (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: user_account_roles
+            constraintName: FK_USEACCROL_ON_USER
+            referencedColumnNames: id
+            referencedTableName: user_account
+

@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1763029072799-13
+      author: aleksey
+      changes:
+        - insert:
+            tableName: role
+            columns:
+              - column:
+                  name: id
+                  valueSequenceNext: role_seq
+              - column:
+                    name: name
+                    value: ROLE_ADMIN
+        - insert:
+              tableName: role
+              columns:
+                  - column:
+                      name: id
+                      valueSequenceNext: role_seq
+                  - column:
+                        name: name
+                        value: ROLE_USER
