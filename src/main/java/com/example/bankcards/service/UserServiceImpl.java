@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -26,11 +27,15 @@ import java.util.Optional;
 @Transactional
 public class UserServiceImpl implements UserService {
 
+    public static final String JSON_PASSWORD_KEY = "password";
+
     private final UserRepository userRepository;
 
     private final ObjectMapper objectMapper;
 
     private final UserMapper userMapper;
+
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Page<User> getAll(UserFilter filter, Pageable pageable) {
@@ -48,6 +53,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto create(UserDto userDto) {
         User user = userMapper.toEntity(userDto);
+        user.setPassword(passwordEncoder.encode(userDto.password()));
         userRepository.save(user);
         return userMapper.toUserDto(user);
     }
@@ -57,7 +63,11 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Entity with id `%s` not found".formatted(id)));
 
-        objectMapper.readerForUpdating(user).readValue(patchNode);
+        if (patchNode.has(JSON_PASSWORD_KEY)) {
+            user.setPassword(passwordEncoder.encode(patchNode.get(JSON_PASSWORD_KEY).asText()));
+        } else {
+            objectMapper.readerForUpdating(user).readValue(patchNode);
+        }
 
         return userRepository.save(user);
     }
@@ -67,7 +77,11 @@ public class UserServiceImpl implements UserService {
         Collection<User> users = userRepository.findAllById(ids);
 
         for (User user : users) {
-            objectMapper.readerForUpdating(user).readValue(patchNode);
+            if (patchNode.has(JSON_PASSWORD_KEY)) {
+                user.setPassword(passwordEncoder.encode(patchNode.get(JSON_PASSWORD_KEY).asText()));
+            } else {
+                objectMapper.readerForUpdating(user).readValue(patchNode);
+            }
         }
 
         List<User> resultUsers = userRepository.saveAll(users);
