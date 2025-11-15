@@ -46,11 +46,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getMany(List<Long> ids) {
-        return userRepository.findAllById(ids);
-    }
-
-    @Override
     public UserDto create(UserDto userDto) {
         User user = userMapper.toEntity(userDto);
         userRepository.save(user);

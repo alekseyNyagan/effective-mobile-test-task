@@ -15,8 +15,6 @@ public interface UserService {
 
     UserDto getOne(Long id);
 
-    List<User> getMany(List<Long> ids);
-
     UserDto create(UserDto userDto);
 
     User patch(Long id, JsonNode patchNode) throws IOException;

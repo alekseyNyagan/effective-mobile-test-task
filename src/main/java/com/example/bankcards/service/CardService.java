@@ -18,8 +18,6 @@ public interface CardService {
 
     CardDto getOne(Long id);
 
-    List<CardDto> getMany(List<Long> ids);
-
     CardDto create(CardDto dto);
 
     CardDto patch(Long id, JsonNode patchNode) throws IOException;

@@ -32,11 +32,6 @@ public class UserController {
         return userService.getOne(id);
     }
 
-    @GetMapping("/by-ids")
-    public List<User> getMany(@RequestParam List<Long> ids) {
-        return userService.getMany(ids);
-    }
-
     @PostMapping
     public UserDto create(@RequestBody UserDto userDto) {
         return userService.create(userDto);

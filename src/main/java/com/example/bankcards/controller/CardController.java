@@ -38,11 +38,6 @@ public class CardController {
         return cardService.getOne(id);
     }
 
-    @GetMapping("/by-ids")
-    public List<CardDto> getMany(@RequestParam List<Long> ids) {
-        return cardService.getMany(ids);
-    }
-
     @PostMapping
     public CardDto create(@RequestBody CardDto dto) {
         return cardService.create(dto);

@@ -57,14 +57,6 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public List<CardDto> getMany(List<Long> ids) {
-        List<Card> cards = cardRepository.findAllById(ids);
-        return cards.stream()
-                .map(cardMapper::toCardDto)
-                .toList();
-    }
-
-    @Override
     public CardDto create(CardDto dto) {
         User owner = userRepository.findByPhoneNumber(dto.ownerPhoneNumber()).orElseThrow(() ->
                 new UserNotFoundException("Пользователь с номером " + dto.ownerPhoneNumber() + " не найден"));
