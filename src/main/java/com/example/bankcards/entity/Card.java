@@ -21,7 +21,7 @@ public class Card {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "card_number", nullable = false, unique = true, length = 15)
+    @Column(name = "card_number", nullable = false, unique = true, length = 20)
     private String cardNumber;
 
     @Column(name = "last_4", nullable = false, length = 4)

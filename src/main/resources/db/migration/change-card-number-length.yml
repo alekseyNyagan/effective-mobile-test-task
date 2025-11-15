@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1763100348482-1
+      author: aleksey (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - modifyDataType:
+            columnName: card_number
+            newDataType: VARCHAR(20)
+            tableName: card
+
