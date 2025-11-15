@@ -2,6 +2,7 @@ package com.example.bankcards.service;
 
 import com.example.bankcards.dto.UserDto;
 import com.example.bankcards.entity.User;
+import com.example.bankcards.repository.RoleRepository;
 import com.example.bankcards.repository.UserRepository;
 import com.example.bankcards.mapper.UserMapper;
 import com.example.bankcards.repository.UserFilter;
@@ -37,6 +38,8 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final RoleRepository roleRepository;
+
     @Override
     public Page<User> getAll(UserFilter filter, Pageable pageable) {
         Specification<User> spec = filter.toSpecification();
@@ -52,8 +55,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto create(UserDto userDto) {
-        User user = userMapper.toEntity(userDto);
-        user.setPassword(passwordEncoder.encode(userDto.password()));
+        User user = userMapper.toEntity(userDto, passwordEncoder, roleRepository);
         userRepository.save(user);
         return userMapper.toUserDto(user);
     }
