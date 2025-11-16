@@ -27,4 +27,8 @@ public interface CardService {
     CardDto delete(Long id);
 
     void deleteMany(List<Long> ids);
+
+    void createBlockRequest(Long id);
+
+    void approveBlockRequest(Long id);
 }

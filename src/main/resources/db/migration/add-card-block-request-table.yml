@@ -1,0 +1,52 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1763270951808-1
+      author: aleksey (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_card_block_requests
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: card_id
+                  type: BIGINT
+              - column:
+                  name: user_id
+                  type: BIGINT
+              - column:
+                  name: created_at
+                  type: DATETIME
+              - column:
+                  name: status
+                  type: VARCHAR(255)
+            tableName: card_block_requests
+  - changeSet:
+      id: 1763270951808-2
+      author: aleksey (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: card_id
+            baseTableName: card_block_requests
+            constraintName: FK_CARD_BLOCK_REQUESTS_ON_CARD
+            referencedColumnNames: id
+            referencedTableName: card
+  - changeSet:
+      id: 1763270951808-3
+      author: aleksey (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: card_block_requests
+            constraintName: FK_CARD_BLOCK_REQUESTS_ON_USER
+            referencedColumnNames: id
+            referencedTableName: user_account
+

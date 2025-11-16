@@ -3,14 +3,22 @@ package com.example.bankcards.service;
 import com.example.bankcards.controller.CardFilter;
 import com.example.bankcards.dto.CardDto;
 import com.example.bankcards.entity.Card;
+import com.example.bankcards.entity.CardBlockRequest;
 import com.example.bankcards.entity.User;
+import com.example.bankcards.entity.enums.BlockRequestStatus;
 import com.example.bankcards.entity.enums.CardStatus;
+import com.example.bankcards.exception.BadRequestException;
+import com.example.bankcards.exception.ForbiddenOperationException;
 import com.example.bankcards.exception.UserNotFoundException;
 import com.example.bankcards.mapper.CardMapper;
 import com.example.bankcards.repository.AdminCardFilter;
+import com.example.bankcards.repository.CardBlockRequestRepository;
 import com.example.bankcards.repository.CardRepository;
 import com.example.bankcards.repository.UserRepository;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,6 +44,12 @@ public class CardServiceImpl implements CardService {
     private final CardRepository cardRepository;
 
     private final UserRepository userRepository;
+
+    private final CardBlockRequestRepository requestRepository;
+
+    private final UserService userService;
+
+    private final ObjectMapper objectMapper;
 
     @Override
     public Page<Card> getAll(AdminCardFilter filter, Pageable pageable) {
@@ -109,5 +123,47 @@ public class CardServiceImpl implements CardService {
     @Override
     public void deleteMany(List<Long> ids) {
         cardRepository.deleteAllById(ids);
+    }
+
+    @Override
+    public void createBlockRequest(Long cardId) {
+
+        Card card = cardRepository.findById(cardId)
+                .orElseThrow(() -> new RuntimeException("Card not found"));
+
+        User currentUser = userService.getCurrentUser();
+
+        if (!card.getOwner().getId().equals(currentUser.getId())) {
+            throw new ForbiddenOperationException("This card doesn't belong to you");
+        }
+
+        if (requestRepository.existsByCardAndStatus(card, BlockRequestStatus.PENDING)) {
+            throw new BadRequestException("Request already submitted");
+        }
+
+        CardBlockRequest request = new CardBlockRequest();
+        request.setCard(card);
+        request.setUser(currentUser);
+
+        requestRepository.save(request);
+    }
+
+    @Override
+    public void approveBlockRequest(Long requestId) {
+
+        CardBlockRequest request = requestRepository.findById(requestId)
+                .orElseThrow(() -> new EntityNotFoundException("Block request not found"));
+
+        if (request.getStatus() != BlockRequestStatus.PENDING) {
+            throw new BadRequestException("This request is already processed");
+        }
+
+        request.setStatus(BlockRequestStatus.APPROVED);
+        requestRepository.save(request);
+
+        ObjectNode node = objectMapper.createObjectNode();
+        node.put(CARD_STATUS, CardStatus.BLOCKED.name());
+
+        patch(request.getCard().getId(), node);
     }
 }

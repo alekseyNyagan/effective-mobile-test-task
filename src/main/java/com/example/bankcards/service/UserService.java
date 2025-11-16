@@ -24,4 +24,6 @@ public interface UserService {
     User delete(Long id);
 
     void deleteMany(List<Long> ids);
+
+    User getCurrentUser();
 }

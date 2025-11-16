@@ -1,5 +1,6 @@
 package com.example.bankcards.controller;
 
+import com.example.bankcards.dto.BlockCardRequestDto;
 import com.example.bankcards.dto.CardDto;
 import com.example.bankcards.entity.Card;
 import com.example.bankcards.repository.AdminCardFilter;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedModel;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -61,5 +63,17 @@ public class CardController {
     @DeleteMapping
     public void deleteMany(@RequestParam List<Long> ids) {
         cardService.deleteMany(ids);
+    }
+
+    @PostMapping("/block-request")
+    public ResponseEntity<Void> createBlockRequest(@RequestBody BlockCardRequestDto dto) {
+        cardService.createBlockRequest(dto.cardId());
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/block-request/{id}/approve")
+    public ResponseEntity<Void> approveBlock(@PathVariable Long id) {
+        cardService.approveBlockRequest(id);
+        return ResponseEntity.ok().build();
     }
 }

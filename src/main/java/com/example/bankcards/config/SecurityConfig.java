@@ -20,9 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-public class  SecurityConfig {
-    public static final String ADMIN_ROLE = "ADMIN";
-    public static final String USER_ROLE = "USER";
+public class SecurityConfig {
     private final JwtAuthFilter jwtAuthFilter;
     private final AppUserDetailsService userDetailsService;
 
@@ -53,21 +51,23 @@ public class  SecurityConfig {
                 .authenticationProvider(authenticationProvider(userDetailsService, passwordEncoder()))
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/card/v1/all").hasRole(ADMIN_ROLE)
-                        .requestMatchers(HttpMethod.GET, "/card/v1/myCards").hasRole(USER_ROLE)
-                        .requestMatchers(HttpMethod.GET, "/card/v1/*").hasRole(ADMIN_ROLE)
-                        .requestMatchers(HttpMethod.POST, "/card/v1").hasRole(ADMIN_ROLE)
-                        .requestMatchers(HttpMethod.PATCH, "/card/v1/changeCardStatus/*").hasRole(ADMIN_ROLE)
-                        .requestMatchers(HttpMethod.PATCH, "/card/v1/changeManyCardStatus").hasRole(ADMIN_ROLE)
-                        .requestMatchers(HttpMethod.DELETE, "/card/v1/*").hasRole(ADMIN_ROLE)
-                        .requestMatchers(HttpMethod.DELETE, "/card/v1").hasRole(ADMIN_ROLE)
-                        .requestMatchers(HttpMethod.GET, "/user/v1").hasRole(ADMIN_ROLE)
-                        .requestMatchers(HttpMethod.GET, "/user/v1/*").hasRole(ADMIN_ROLE)
-                        .requestMatchers(HttpMethod.POST, "/user/v1").hasRole(ADMIN_ROLE)
-                        .requestMatchers(HttpMethod.PATCH, "/user/v1/*").hasRole(ADMIN_ROLE)
-                        .requestMatchers(HttpMethod.PATCH, "/user/v1").hasRole(ADMIN_ROLE)
-                        .requestMatchers(HttpMethod.DELETE, "/user/v1/*").hasRole(ADMIN_ROLE)
-                        .requestMatchers(HttpMethod.DELETE, "/user/v1").hasRole(ADMIN_ROLE)
+                        .requestMatchers(HttpMethod.GET, "/card/v1/all").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/card/v1/myCards").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/card/v1/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/card/v1").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/card/v1/changeCardStatus/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/card/v1/changeManyCardStatus").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/card/v1/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/card/v1").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/user/v1").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/user/v1/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/user/v1").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/user/v1/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/user/v1").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/user/v1/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/user/v1").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/card/v1/block-request").hasRole("USER")
+                        .requestMatchers(HttpMethod.POST, "/card/v1/block-request/*/approve").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)

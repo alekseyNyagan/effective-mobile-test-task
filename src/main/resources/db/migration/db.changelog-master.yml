@@ -5,3 +5,5 @@ databaseChangeLog:
       file: db/migration/add-users-roles.yml
   - include:
       file: db/migration/change-card-number-length.yml
+  - include:
+      file: db/migration/add-card-block-request-table.yml
