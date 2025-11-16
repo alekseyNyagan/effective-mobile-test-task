@@ -2,7 +2,7 @@ package com.example.bankcards.service;
 
 import com.example.bankcards.entity.Card;
 import com.example.bankcards.entity.Transaction;
-import com.example.bankcards.entity.TransactionRepository;
+import com.example.bankcards.repository.TransactionRepository;
 import com.example.bankcards.entity.enums.CardStatus;
 import com.example.bankcards.exception.ForbiddenOperationException;
 import com.example.bankcards.repository.CardRepository;
