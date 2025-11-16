@@ -172,7 +172,7 @@ public class CardServiceImpl implements CardService {
     public BigDecimal getBalance(Long cardId) {
         User currentUser = userService.getCurrentUser();
 
-        Card card = cardRepository.findByIdAndUser(cardId, currentUser)
+        Card card = cardRepository.findByIdAndOwner(cardId, currentUser)
                 .orElseThrow(() -> new EntityNotFoundException("Card not found"));
 
         if (card.getCardStatus() == CardStatus.BLOCKED) {
