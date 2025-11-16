@@ -1,0 +1,60 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1763274872597-1
+      author: aleksey (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_transactions
+                  name: id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: from_card_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: to_card_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: amount
+                  type: DECIMAL
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created_at
+                  type: DATETIME
+            tableName: transactions
+  - changeSet:
+      id: 1763274872597-2
+      author: aleksey (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: from_card_id
+            baseTableName: transactions
+            constraintName: FK_TRANSACTIONS_ON_FROM_CARD
+            referencedColumnNames: id
+            referencedTableName: card
+  - changeSet:
+      id: 1763274872597-3
+      author: aleksey (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: to_card_id
+            baseTableName: transactions
+            constraintName: FK_TRANSACTIONS_ON_TO_CARD
+            referencedColumnNames: id
+            referencedTableName: card
+
