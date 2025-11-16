@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -165,5 +166,19 @@ public class CardServiceImpl implements CardService {
         node.put(CARD_STATUS, CardStatus.BLOCKED.name());
 
         patch(request.getCard().getId(), node);
+    }
+
+    @Override
+    public BigDecimal getBalance(Long cardId) {
+        User currentUser = userService.getCurrentUser();
+
+        Card card = cardRepository.findByIdAndUser(cardId, currentUser)
+                .orElseThrow(() -> new EntityNotFoundException("Card not found"));
+
+        if (card.getCardStatus() == CardStatus.BLOCKED) {
+            throw new ForbiddenOperationException("Card is blocked");
+        }
+
+        return card.getMoneyAmount();
     }
 }

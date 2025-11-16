@@ -68,6 +68,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/user/v1").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/card/v1/block-request").hasRole("USER")
                         .requestMatchers(HttpMethod.POST, "/card/v1/block-request/*/approve").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/card/v1/*/balance").hasRole("USER")
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
