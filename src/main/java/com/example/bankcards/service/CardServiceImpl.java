@@ -74,7 +74,7 @@ public class CardServiceImpl implements CardService {
     @Override
     public CardDto create(CardDto dto) {
         User owner = userRepository.findByPhoneNumber(dto.ownerPhoneNumber()).orElseThrow(() ->
-                new UserNotFoundException("Пользователь с номером " + dto.ownerPhoneNumber() + " не найден"));
+                new UserNotFoundException("User with phone number " + dto.ownerPhoneNumber() + " not found"));
 
         Card card = cardMapper.toEntity(dto, owner);
         card.setLast4(card.getCardNumber().substring(card.getCardNumber().length() - 4));
