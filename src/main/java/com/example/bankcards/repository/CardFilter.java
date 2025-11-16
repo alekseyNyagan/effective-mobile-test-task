@@ -1,4 +1,4 @@
-package com.example.bankcards.controller;
+package com.example.bankcards.repository;
 
 import com.example.bankcards.entity.Card;
 import org.springframework.data.jpa.domain.Specification;

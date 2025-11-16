@@ -4,6 +4,7 @@ import com.example.bankcards.dto.BlockCardRequestDto;
 import com.example.bankcards.dto.CardDto;
 import com.example.bankcards.entity.Card;
 import com.example.bankcards.repository.AdminCardFilter;
+import com.example.bankcards.repository.CardFilter;
 import com.example.bankcards.service.CardService;
 import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.validation.Valid;
