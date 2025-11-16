@@ -6,6 +6,7 @@ import com.example.bankcards.entity.Card;
 import com.example.bankcards.repository.AdminCardFilter;
 import com.example.bankcards.service.CardService;
 import com.fasterxml.jackson.databind.JsonNode;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -42,7 +43,7 @@ public class CardController {
     }
 
     @PostMapping
-    public CardDto create(@RequestBody CardDto dto) {
+    public CardDto create(@Valid @RequestBody CardDto dto) {
         return cardService.create(dto);
     }
 

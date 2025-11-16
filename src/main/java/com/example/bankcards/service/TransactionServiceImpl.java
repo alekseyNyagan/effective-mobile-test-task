@@ -25,9 +25,6 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public void transferBetweenCards(Long fromId, Long toId, BigDecimal amount) {
-        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new ForbiddenOperationException("Invalid amount");
-        }
 
         Card from = cardRepository.findById(fromId)
                 .orElseThrow(() -> new EntityNotFoundException("Card not found"));

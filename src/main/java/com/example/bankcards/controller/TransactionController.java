@@ -2,6 +2,7 @@ package com.example.bankcards.controller;
 
 import com.example.bankcards.dto.TransferRequest;
 import com.example.bankcards.service.TransactionService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +18,7 @@ public class TransactionController {
     TransactionService transactionService;
 
     @PostMapping("/transfer")
-    public ResponseEntity<Void> transfer(@RequestBody TransferRequest request) {
+    public ResponseEntity<Void> transfer(@Valid @RequestBody TransferRequest request) {
         transactionService.transferBetweenCards(
                 request.fromCardId(),
                 request.toCardId(),
