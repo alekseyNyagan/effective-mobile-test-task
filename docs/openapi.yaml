@@ -1,1 +1,669 @@
-# Здесь будет OpenAPI описание всех доступных эндпоинтов и моделей данных.
+openapi: "3.0.3"
+info:
+  title: "OpenAPI definition"
+  description: "bank_rest-main API"
+  version: "1.0.0"
+servers:
+  - url: "http://localhost:8080"
+    description: "Generated server url"
+paths:
+  /auth/login:
+    post:
+      tags:
+        - "auth-controller"
+      operationId: "login"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+  /card/v1/all:
+    get:
+      tags:
+        - "card-controller"
+      operationId: "getAll"
+      parameters:
+        - name: "filter"
+          in: "query"
+          required: true
+          schema:
+            $ref: "#/components/schemas/AdminCardFilter"
+        - name: "pageable"
+          in: "query"
+          required: true
+          schema:
+            $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PagedModelCard"
+  /card/v1/myCards:
+    get:
+      tags:
+        - "card-controller"
+      operationId: "getAllMyCards"
+      parameters:
+        - name: "filter"
+          in: "query"
+          required: true
+          schema:
+            $ref: "#/components/schemas/CardFilter"
+        - name: "pageable"
+          in: "query"
+          required: true
+          schema:
+            $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PagedModelCard"
+  /card/v1/{id}:
+    get:
+      tags:
+        - "card-controller"
+      operationId: "getOne"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CardDto"
+    delete:
+      tags:
+        - "card-controller"
+      operationId: "delete"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CardDto"
+  /card/v1:
+    post:
+      tags:
+        - "card-controller"
+      operationId: "create"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CardDto"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CardDto"
+    delete:
+      tags:
+        - "card-controller"
+      operationId: "deleteMany"
+      parameters:
+        - name: "ids"
+          in: "query"
+          required: true
+          schema:
+            type: "array"
+            items:
+              type: "integer"
+              format: "int64"
+      responses:
+        "200":
+          description: "OK"
+  /card/v1/changeCardStatus/{id}:
+    patch:
+      tags:
+        - "card-controller"
+      operationId: "patch"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/JsonNode"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CardDto"
+  /card/v1/changeManyCardStatus:
+    patch:
+      tags:
+        - "card-controller"
+      operationId: "patchMany"
+      parameters:
+        - name: "ids"
+          in: "query"
+          required: true
+          schema:
+            type: "array"
+            items:
+              type: "integer"
+              format: "int64"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/JsonNode"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  type: "integer"
+                  format: "int64"
+  /card/v1/block-request:
+    post:
+      tags:
+        - "card-controller"
+      operationId: "createBlockRequest"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BlockCardRequestDto"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Void"
+  /card/v1/block-request/{id}/approve:
+    post:
+      tags:
+        - "card-controller"
+      operationId: "approveBlock"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Void"
+  /card/v1/{cardId}/balance:
+    get:
+      tags:
+        - "card-controller"
+      operationId: "getBalance"
+      parameters:
+        - name: "cardId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/BigDecimal"
+  /transfer/transfer:
+    post:
+      tags:
+        - "transaction-controller"
+      operationId: "transfer"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransferRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Void"
+  /user/v1:
+    get:
+      tags:
+        - "user-controller"
+      operationId: "getAll"
+      parameters:
+        - name: "filter"
+          in: "query"
+          required: true
+          schema:
+            $ref: "#/components/schemas/UserFilter"
+        - name: "pageable"
+          in: "query"
+          required: true
+          schema:
+            $ref: "#/components/schemas/Pageable"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/PagedModelUser"
+    post:
+      tags:
+        - "user-controller"
+      operationId: "create"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserDto"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/UserDto"
+    patch:
+      tags:
+        - "user-controller"
+      operationId: "patchMany"
+      parameters:
+        - name: "ids"
+          in: "query"
+          required: true
+          schema:
+            type: "array"
+            items:
+              type: "integer"
+              format: "int64"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/JsonNode"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  type: "integer"
+                  format: "int64"
+    delete:
+      tags:
+        - "user-controller"
+      operationId: "deleteMany"
+      parameters:
+        - name: "ids"
+          in: "query"
+          required: true
+          schema:
+            type: "array"
+            items:
+              type: "integer"
+              format: "int64"
+      responses:
+        "200":
+          description: "OK"
+  /user/v1/{id}:
+    get:
+      tags:
+        - "user-controller"
+      operationId: "getOne"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/UserDto"
+    patch:
+      tags:
+        - "user-controller"
+      operationId: "patch"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/JsonNode"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/User"
+    delete:
+      tags:
+        - "user-controller"
+      operationId: "delete"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/User"
+components:
+  schemas:
+    LoginRequest:
+      type: "object"
+      properties:
+        phoneNumber:
+          type: "string"
+        password:
+          type: "string"
+    PageMetadata:
+      type: "object"
+      properties:
+        size:
+          type: "integer"
+          format: "int64"
+        number:
+          type: "integer"
+          format: "int64"
+        totalElements:
+          type: "integer"
+          format: "int64"
+        totalPages:
+          type: "integer"
+          format: "int64"
+    YearMonth:
+      type: "object"
+      properties:
+        year:
+          type: "integer"
+          format: "int32"
+        month:
+          type: "string"
+          format: "byte"
+        monthValue:
+          type: "integer"
+          format: "int32"
+        leapYear:
+          type: "boolean"
+    BigDecimal:
+      type: "object"
+      properties: { }
+    Role:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+        name:
+          type: "string"
+    User:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+        phoneNumber:
+          type: "string"
+        password:
+          type: "string"
+        name:
+          type: "string"
+        surname:
+          type: "string"
+        roles:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Role"
+        cards:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Card"
+    Card:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+        cardNumber:
+          type: "string"
+        last4:
+          type: "string"
+        expiry:
+          $ref: "#/components/schemas/YearMonth"
+        moneyAmount:
+          $ref: "#/components/schemas/BigDecimal"
+        cardStatus:
+          type: "string"
+          enum:
+            - "ACTIVE"
+            - "BLOCKED"
+            - "EXPIRED"
+        owner:
+          $ref: "#/components/schemas/User"
+    PagedModelCard:
+      type: "object"
+      properties:
+        page:
+          $ref: "#/components/schemas/PageMetadata"
+        content:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Card"
+    AdminCardFilter:
+      type: "object"
+      properties:
+        ownerName:
+          type: "string"
+        ownerSurname:
+          type: "string"
+    Pageable:
+      type: "object"
+      properties:
+        page:
+          type: "integer"
+          format: "int32"
+        size:
+          type: "integer"
+          format: "int32"
+        sort:
+          type: "array"
+          items:
+            type: "string"
+    CardFilter:
+      type: "object"
+      properties:
+        ownerPhoneNumber:
+          type: "string"
+    CardDto:
+      type: "object"
+      properties:
+        cardNumber:
+          type: "string"
+        expiry:
+          $ref: "#/components/schemas/YearMonth"
+        moneyAmount:
+          $ref: "#/components/schemas/BigDecimal"
+        cardStatus:
+          type: "string"
+          enum:
+            - "ACTIVE"
+            - "BLOCKED"
+            - "EXPIRED"
+        ownerPhoneNumber:
+          type: "string"
+    JsonNode:
+      type: "object"
+      properties:
+        integralNumber:
+          type: "boolean"
+        double:
+          type: "boolean"
+        valueNode:
+          type: "boolean"
+        floatingPointNumber:
+          type: "boolean"
+        bigInteger:
+          type: "boolean"
+        nodeType:
+          type: "string"
+          enum:
+            - "ARRAY"
+            - "BINARY"
+            - "BOOLEAN"
+            - "MISSING"
+            - "NULL"
+            - "NUMBER"
+            - "OBJECT"
+            - "POJO"
+            - "STRING"
+        float:
+          type: "boolean"
+        int:
+          type: "boolean"
+        long:
+          type: "boolean"
+        textual:
+          type: "boolean"
+        empty:
+          type: "boolean"
+        missingNode:
+          type: "boolean"
+        pojo:
+          type: "boolean"
+        number:
+          type: "boolean"
+        boolean:
+          type: "boolean"
+        "null":
+          type: "boolean"
+        array:
+          type: "boolean"
+        binary:
+          type: "boolean"
+        containerNode:
+          type: "boolean"
+        short:
+          type: "boolean"
+        bigDecimal:
+          type: "boolean"
+        object:
+          type: "boolean"
+    BlockCardRequestDto:
+      type: "object"
+      properties:
+        cardId:
+          type: "integer"
+          format: "int64"
+    Void:
+      type: "object"
+      properties: { }
+    TransferRequest:
+      type: "object"
+      properties:
+        fromCardId:
+          type: "integer"
+          format: "int64"
+        toCardId:
+          type: "integer"
+          format: "int64"
+        amount:
+          $ref: "#/components/schemas/BigDecimal"
+    PagedModelUser:
+      type: "object"
+      properties:
+        page:
+          $ref: "#/components/schemas/PageMetadata"
+        content:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/User"
+    UserFilter:
+      type: "object"
+      properties:
+        phoneNumber:
+          type: "string"
+    UserDto:
+      type: "object"
+      properties:
+        phoneNumber:
+          type: "string"
+        password:
+          type: "string"
+        name:
+          type: "string"
+        surname:
+          type: "string"
+        roleNames:
+          type: "array"
+          items:
+            type: "string"

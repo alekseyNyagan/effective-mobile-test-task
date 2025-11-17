@@ -9,6 +9,9 @@ spring:
     show-sql: true
   liquibase:
     change-log: classpath:/db/migration/db.changelog-master.yml
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
 
 server:
   port: 8080

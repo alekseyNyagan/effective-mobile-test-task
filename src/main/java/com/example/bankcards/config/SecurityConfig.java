@@ -51,6 +51,7 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider(userDetailsService, passwordEncoder()))
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/card/v1/all").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/card/v1/myCards").hasRole("USER")
                         .requestMatchers(HttpMethod.GET, "/card/v1/*").hasRole("ADMIN")
