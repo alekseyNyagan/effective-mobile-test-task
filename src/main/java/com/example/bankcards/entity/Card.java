@@ -1,5 +1,6 @@
 package com.example.bankcards.entity;
 
+import com.example.bankcards.converter.CardNumberConverter;
 import com.example.bankcards.converter.YearMonthConverter;
 import com.example.bankcards.entity.enums.CardStatus;
 import jakarta.persistence.*;
@@ -21,11 +22,9 @@ public class Card {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "card_number", nullable = false, unique = true, length = 20)
+    @Column(name = "card_number", nullable = false, unique = true, length = 1024)
+    @Convert(converter = CardNumberConverter.class)
     private String cardNumber;
-
-    @Column(name = "last_4", nullable = false, length = 4)
-    private String last4;
 
     @Convert(converter = YearMonthConverter.class)
     @Column(name = "expiry", nullable = false)

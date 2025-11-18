@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1763370921036-1
+      author: aleksey (generated)
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - dropColumn:
+            columnName: last_4
+            tableName: card
+

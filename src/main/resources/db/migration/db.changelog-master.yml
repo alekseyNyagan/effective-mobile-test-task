@@ -9,3 +9,7 @@ databaseChangeLog:
       file: db/migration/add-card-block-request-table.yml
   - include:
       file: db/migration/add-transactions-table.yml
+  - include:
+      file: db/migration/drop-column-last4-in-card-table.yml
+  - include:
+     file: db/migration/change-card-number-length-to-1024.yml
