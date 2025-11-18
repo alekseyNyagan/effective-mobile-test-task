@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/transfer")
 public class TransactionController {
 
-    TransactionService transactionService;
+    private final TransactionService transactionService;
 
     @PostMapping("/transfer")
     public ResponseEntity<Void> transfer(@Valid @RequestBody TransferRequest request) {
