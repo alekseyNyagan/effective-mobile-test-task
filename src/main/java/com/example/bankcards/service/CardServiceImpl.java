@@ -59,8 +59,9 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public Page<Card> getAllMyCards(CardFilter filter, Pageable pageable) {
-        Specification<Card> spec = filter.toSpecification();
+    public Page<Card> getAllMyCards(CardFilter filter, Pageable pageable, User currentUser) {
+        Specification<Card> spec = filter.toSpecification()
+                .and((root, query, cb) -> cb.equal(root.get("owner"), currentUser));
         return cardRepository.findAll(spec, pageable);
     }
 

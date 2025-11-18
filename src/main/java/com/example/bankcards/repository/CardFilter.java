@@ -1,17 +1,22 @@
 package com.example.bankcards.repository;
 
 import com.example.bankcards.entity.Card;
+import com.example.bankcards.entity.enums.CardStatus;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.util.StringUtils;
 
-public record CardFilter(String ownerPhoneNumber) {
+import java.util.List;
+
+public record CardFilter(List<CardStatus> statuses) {
     public Specification<Card> toSpecification() {
-        return ownerPhoneNumberSpec();
+        return statusIn(statuses);
     }
 
-    private Specification<Card> ownerPhoneNumberSpec() {
-        return ((root, query, cb) -> StringUtils.hasText(ownerPhoneNumber)
-                ? cb.equal(root.get("owner").get("phoneNumber"), ownerPhoneNumber)
-                : null);
+    private Specification<Card> statusIn(List<CardStatus> statuses) {
+        return (root, query, cb) -> {
+            if (statuses == null || statuses.isEmpty()) {
+                return null;
+            }
+            return root.get("cardStatus").in(statuses);
+        };
     }
 }

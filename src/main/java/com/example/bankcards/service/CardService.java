@@ -3,6 +3,7 @@ package com.example.bankcards.service;
 import com.example.bankcards.repository.CardFilter;
 import com.example.bankcards.dto.CardDto;
 import com.example.bankcards.entity.Card;
+import com.example.bankcards.entity.User;
 import com.example.bankcards.repository.AdminCardFilter;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.data.domain.Page;
@@ -15,7 +16,7 @@ import java.util.List;
 public interface CardService {
     Page<Card> getAll(AdminCardFilter filter, Pageable pageable);
 
-    Page<Card> getAllMyCards(CardFilter filter, Pageable pageable);
+    Page<Card> getAllMyCards(CardFilter filter, Pageable pageable, User currentUser);
 
     CardDto getOne(Long id);
 

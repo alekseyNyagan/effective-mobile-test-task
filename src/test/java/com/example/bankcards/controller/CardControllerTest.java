@@ -123,14 +123,14 @@ class CardControllerTest {
 
     @Test
     void getAllMyCards_success() throws Exception {
-        when(cardService.getAllMyCards(any(), any()))
+        when(cardService.getAllMyCards(any(), any(), any()))
                 .thenReturn(new PageImpl<>(List.of(), PageRequest.of(0, 10), 0));
 
         mockMvc.perform(get("/card/v1/myCards")
                         .with(jwt().authorities(new SimpleGrantedAuthority("ROLE_USER"))))
                 .andExpect(status().isOk());
 
-        verify(cardService).getAllMyCards(any(), any());
+        verify(cardService).getAllMyCards(any(), any(), any());
     }
 
     @Test

@@ -3,6 +3,7 @@ package com.example.bankcards.controller;
 import com.example.bankcards.dto.BlockCardRequestDto;
 import com.example.bankcards.dto.CardDto;
 import com.example.bankcards.entity.Card;
+import com.example.bankcards.entity.User;
 import com.example.bankcards.repository.AdminCardFilter;
 import com.example.bankcards.repository.CardFilter;
 import com.example.bankcards.service.CardService;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedModel;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -33,8 +35,8 @@ public class CardController {
     }
 
     @GetMapping("/myCards")
-    public PagedModel<Card> getAllMyCards(@ModelAttribute CardFilter filter, Pageable pageable) {
-        Page<Card> cards = cardService.getAllMyCards(filter, pageable);
+    public PagedModel<Card> getAllMyCards(@ModelAttribute CardFilter filter, Pageable pageable, @AuthenticationPrincipal User currentUser) {
+        Page<Card> cards = cardService.getAllMyCards(filter, pageable, currentUser);
         return new PagedModel<>(cards);
     }
 

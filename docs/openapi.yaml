@@ -54,11 +54,17 @@ paths:
         - "card-controller"
       operationId: "getAllMyCards"
       parameters:
-        - name: "filter"
+        - name: "statuses"
           in: "query"
-          required: true
+          required: false
           schema:
-            $ref: "#/components/schemas/CardFilter"
+            type: "array"
+            items:
+              type: "string"
+              enum:
+                - "ACTIVE"
+                - "BLOCKED"
+                - "EXPIRED"
         - name: "pageable"
           in: "query"
           required: true
@@ -542,8 +548,14 @@ components:
     CardFilter:
       type: "object"
       properties:
-        ownerPhoneNumber:
-          type: "string"
+        statuses:
+          type: "array"
+          items:
+            type: "string"
+            enum:
+              - "ACTIVE"
+              - "BLOCKED"
+              - "EXPIRED"
     CardDto:
       type: "object"
       properties:
