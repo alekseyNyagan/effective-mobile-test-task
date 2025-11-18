@@ -243,7 +243,7 @@ class CardControllerTest {
         Long cardId = 1L;
         BlockCardRequestDto dto = new BlockCardRequestDto(cardId);
 
-        doNothing().when(cardService).createBlockRequest(cardId);
+        doNothing().when(cardService).createBlockRequest(eq(cardId), any());
 
         mockMvc.perform(post("/card/v1/block-request")
                         .with(jwt().authorities(new SimpleGrantedAuthority("ROLE_USER")))
@@ -251,7 +251,7 @@ class CardControllerTest {
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk());
 
-        verify(cardService).createBlockRequest(cardId);
+        verify(cardService).createBlockRequest(eq(cardId), any());
     }
 
     @Test
@@ -272,13 +272,13 @@ class CardControllerTest {
         Long cardId = 1L;
         BigDecimal balance = new BigDecimal("5000.50");
 
-        when(cardService.getBalance(cardId)).thenReturn(balance);
+        when(cardService.getBalance(eq(cardId), any())).thenReturn(balance);
 
         mockMvc.perform(get("/card/v1/{cardId}/balance", cardId)
                         .with(jwt().authorities(new SimpleGrantedAuthority("ROLE_USER"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").value(5000.50));
 
-        verify(cardService).getBalance(cardId);
+        verify(cardService).getBalance(eq(cardId), any());
     }
 }

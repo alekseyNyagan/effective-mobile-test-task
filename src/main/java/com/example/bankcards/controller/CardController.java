@@ -71,8 +71,8 @@ public class CardController {
     }
 
     @PostMapping("/block-request")
-    public ResponseEntity<Void> createBlockRequest(@RequestBody BlockCardRequestDto dto) {
-        cardService.createBlockRequest(dto.cardId());
+    public ResponseEntity<Void> createBlockRequest(@RequestBody BlockCardRequestDto dto, @AuthenticationPrincipal User currentUser) {
+        cardService.createBlockRequest(dto.cardId(), currentUser);
         return ResponseEntity.ok().build();
     }
 
@@ -83,8 +83,8 @@ public class CardController {
     }
 
     @GetMapping("/{cardId}/balance")
-    public ResponseEntity<BigDecimal> getBalance(@PathVariable Long cardId) {
-        return ResponseEntity.ok(cardService.getBalance(cardId));
+    public ResponseEntity<BigDecimal> getBalance(@PathVariable Long cardId, @AuthenticationPrincipal User currentUser) {
+        return ResponseEntity.ok(cardService.getBalance(cardId, currentUser));
     }
 
 }

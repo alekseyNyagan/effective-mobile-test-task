@@ -48,8 +48,6 @@ public class CardServiceImpl implements CardService {
 
     private final CardBlockRequestRepository requestRepository;
 
-    private final UserService userService;
-
     private final ObjectMapper objectMapper;
 
     @Override
@@ -127,12 +125,10 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public void createBlockRequest(Long cardId) {
+    public void createBlockRequest(Long cardId, User currentUser) {
 
         Card card = cardRepository.findById(cardId)
                 .orElseThrow(() -> new RuntimeException("Card not found"));
-
-        User currentUser = userService.getCurrentUser();
 
         if (!card.getOwner().getId().equals(currentUser.getId())) {
             throw new ForbiddenOperationException("This card doesn't belong to you");
@@ -169,9 +165,7 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public BigDecimal getBalance(Long cardId) {
-        User currentUser = userService.getCurrentUser();
-
+    public BigDecimal getBalance(Long cardId, User currentUser) {
         Card card = cardRepository.findByIdAndOwner(cardId, currentUser)
                 .orElseThrow(() -> new EntityNotFoundException("Card not found"));
 

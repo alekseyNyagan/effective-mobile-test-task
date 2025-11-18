@@ -30,9 +30,9 @@ public interface CardService {
 
     void deleteMany(List<Long> ids);
 
-    void createBlockRequest(Long id);
+    void createBlockRequest(Long id, User currentUser);
 
     void approveBlockRequest(Long id);
 
-    BigDecimal getBalance(Long cardId);
+    BigDecimal getBalance(Long cardId, User currentUser);
 }
