@@ -1,6 +1,7 @@
 package com.example.bankcards.mapper;
 
 import com.example.bankcards.dto.UserDto;
+import com.example.bankcards.dto.UserResponseDto;
 import com.example.bankcards.entity.Role;
 import com.example.bankcards.entity.User;
 import com.example.bankcards.repository.RoleRepository;
@@ -17,6 +18,8 @@ public interface UserMapper {
 
     @Mapping(target = "roleNames", expression = "java(rolesToRoleNames(user.getRoles()))")
     UserDto toUserDto(User user);
+
+    UserResponseDto toUserResponseDto(User user);
 
     default Set<String> rolesToRoleNames(Set<Role> roles) {
         return roles.stream().map(Role::getName).collect(Collectors.toSet());

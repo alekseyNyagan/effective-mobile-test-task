@@ -2,7 +2,7 @@ package com.example.bankcards.controller;
 
 import com.example.bankcards.config.SecurityTestConfig;
 import com.example.bankcards.dto.UserDto;
-import com.example.bankcards.entity.User;
+import com.example.bankcards.dto.UserResponseDto;
 import com.example.bankcards.security.JwtService;
 import com.example.bankcards.service.UserService;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
@@ -48,7 +49,7 @@ class UserControllerTest {
 
     @Test
     void getAll_success() throws Exception {
-        PageImpl<User> usersPage = new PageImpl<>(List.of(), PageRequest.of(0, 10), 0);
+        Page<UserResponseDto> usersPage = new PageImpl<>(List.of(), PageRequest.of(0, 10), 0);
 
         when(userService.getAll(any(), any())).thenReturn(usersPage);
 
@@ -74,23 +75,17 @@ class UserControllerTest {
     @Test
     void getOne_success() throws Exception {
         Long userId = 1L;
-        UserDto userDto = new UserDto(
-                "+79999999999",
-                "password123",
-                "John",
-                "Doe",
-                Set.of("USER")
-        );
+        UserResponseDto userResponseDto = new UserResponseDto("+79999999999", "John", "Doe");
 
-        when(userService.getOne(userId)).thenReturn(userDto);
+
+        when(userService.getOne(userId)).thenReturn(userResponseDto);
 
         mockMvc.perform(get("/user/v1/{id}", userId)
                         .with(jwt().authorities(new SimpleGrantedAuthority("ROLE_ADMIN"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.phoneNumber").value("+79999999999"))
                 .andExpect(jsonPath("$.name").value("John"))
-                .andExpect(jsonPath("$.surname").value("Doe"))
-                .andExpect(jsonPath("$.roleNames[0]").value("USER"));
+                .andExpect(jsonPath("$.surname").value("Doe"));
 
         verify(userService).getOne(userId);
     }
@@ -105,13 +100,7 @@ class UserControllerTest {
                 Set.of("USER")
         );
 
-        UserDto createdUserDto = new UserDto(
-                "+79999999999",
-                "password123",
-                "John",
-                "Doe",
-                Set.of("USER")
-        );
+        UserResponseDto createdUserDto = new UserResponseDto("+79999999999", "John", "Doe");
 
         when(userService.create(any(UserDto.class))).thenReturn(createdUserDto);
 
@@ -155,11 +144,9 @@ class UserControllerTest {
                 }
                 """;
 
-        User user = new User();
-        user.setId(userId);
-        user.setName("Jane");
+        UserResponseDto userResponseDto = new UserResponseDto(null, "Jane", null);
 
-        when(userService.patch(eq(userId), any(JsonNode.class))).thenReturn(user);
+        when(userService.patch(eq(userId), any(JsonNode.class))).thenReturn(userResponseDto);
 
         mockMvc.perform(patch("/user/v1/{id}", userId)
                         .with(jwt().authorities(new SimpleGrantedAuthority("ROLE_ADMIN")))
@@ -194,10 +181,9 @@ class UserControllerTest {
     @Test
     void delete_success() throws Exception {
         Long userId = 1L;
-        User user = new User();
-        user.setId(userId);
+        UserResponseDto userResponseDto = new UserResponseDto(null, null, null);
 
-        when(userService.delete(userId)).thenReturn(user);
+        when(userService.delete(userId)).thenReturn(userResponseDto);
 
         mockMvc.perform(delete("/user/v1/{id}", userId)
                         .with(jwt().authorities(new SimpleGrantedAuthority("ROLE_ADMIN"))))
@@ -220,4 +206,3 @@ class UserControllerTest {
         verify(userService).deleteMany(userIds);
     }
 }
-

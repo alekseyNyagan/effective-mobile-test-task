@@ -1,7 +1,7 @@
 package com.example.bankcards.controller;
 
 import com.example.bankcards.dto.UserDto;
-import com.example.bankcards.entity.User;
+import com.example.bankcards.dto.UserResponseDto;
 import com.example.bankcards.repository.UserFilter;
 import com.example.bankcards.service.UserService;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -23,23 +23,23 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public PagedModel<User> getAll(@ModelAttribute UserFilter filter, Pageable pageable) {
-        Page<User> users = userService.getAll(filter, pageable);
+    public PagedModel<UserResponseDto> getAll(@ModelAttribute UserFilter filter, Pageable pageable) {
+        Page<UserResponseDto> users = userService.getAll(filter, pageable);
         return new PagedModel<>(users);
     }
 
     @GetMapping("/{id}")
-    public UserDto getOne(@PathVariable Long id) {
+    public UserResponseDto getOne(@PathVariable Long id) {
         return userService.getOne(id);
     }
 
     @PostMapping
-    public UserDto create(@Valid @RequestBody UserDto userDto) {
+    public UserResponseDto create(@Valid @RequestBody UserDto userDto) {
         return userService.create(userDto);
     }
 
     @PatchMapping("/{id}")
-    public User patch(@PathVariable Long id, @RequestBody JsonNode patchNode) throws IOException {
+    public UserResponseDto patch(@PathVariable Long id, @RequestBody JsonNode patchNode) throws IOException {
         return userService.patch(id, patchNode);
     }
 
@@ -49,7 +49,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public User delete(@PathVariable Long id) {
+    public UserResponseDto delete(@PathVariable Long id) {
         return userService.delete(id);
     }
 

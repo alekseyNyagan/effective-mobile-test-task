@@ -299,7 +299,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/PagedModelUser"
+                $ref: "#/components/schemas/PagedModelUserResponseDto"
     post:
       tags:
         - "user-controller"
@@ -316,7 +316,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/UserDto"
+                $ref: "#/components/schemas/UserResponseDto"
     patch:
       tags:
         - "user-controller"
@@ -380,7 +380,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/UserDto"
+                $ref: "#/components/schemas/UserResponseDto"
     patch:
       tags:
         - "user-controller"
@@ -404,7 +404,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: "#/components/schemas/UserResponseDto"
     delete:
       tags:
         - "user-controller"
@@ -422,7 +422,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: "#/components/schemas/UserResponseDto"
 components:
   schemas:
     LoginRequest:
@@ -650,7 +650,7 @@ components:
           format: "int64"
         amount:
           $ref: "#/components/schemas/BigDecimal"
-    PagedModelUser:
+    PagedModelUserResponseDto:
       type: "object"
       properties:
         page:
@@ -658,7 +658,7 @@ components:
         content:
           type: "array"
           items:
-            $ref: "#/components/schemas/User"
+            $ref: "#/components/schemas/UserResponseDto"
     UserFilter:
       type: "object"
       properties:
@@ -679,3 +679,12 @@ components:
           type: "array"
           items:
             type: "string"
+    UserResponseDto:
+      type: "object"
+      properties:
+        phoneNumber:
+          type: "string"
+        name:
+          type: "string"
+        surname:
+          type: "string"

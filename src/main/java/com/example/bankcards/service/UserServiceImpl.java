@@ -1,6 +1,7 @@
 package com.example.bankcards.service;
 
 import com.example.bankcards.dto.UserDto;
+import com.example.bankcards.dto.UserResponseDto;
 import com.example.bankcards.entity.User;
 import com.example.bankcards.mapper.UserMapper;
 import com.example.bankcards.repository.RoleRepository;
@@ -41,27 +42,27 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
 
     @Override
-    public Page<User> getAll(UserFilter filter, Pageable pageable) {
+    public Page<UserResponseDto> getAll(UserFilter filter, Pageable pageable) {
         Specification<User> spec = filter.toSpecification();
-        return userRepository.findAll(spec, pageable);
+        return userRepository.findAll(spec, pageable).map(userMapper::toUserResponseDto);
     }
 
     @Override
-    public UserDto getOne(Long id) {
+    public UserResponseDto getOne(Long id) {
         Optional<User> userOptional = userRepository.findById(id);
-         return userMapper.toUserDto(userOptional.orElseThrow(() ->
+        return userMapper.toUserResponseDto(userOptional.orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Entity with id `%s` not found".formatted(id))));
     }
 
     @Override
-    public UserDto create(UserDto userDto) {
+    public UserResponseDto create(UserDto userDto) {
         User user = userMapper.toEntity(userDto, passwordEncoder, roleRepository);
         userRepository.save(user);
-        return userMapper.toUserDto(user);
+        return userMapper.toUserResponseDto(user);
     }
 
     @Override
-    public User patch(Long id, JsonNode patchNode) throws IOException {
+    public UserResponseDto patch(Long id, JsonNode patchNode) throws IOException {
         User user = userRepository.findById(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Entity with id `%s` not found".formatted(id)));
 
@@ -71,7 +72,7 @@ public class UserServiceImpl implements UserService {
             objectMapper.readerForUpdating(user).readValue(patchNode);
         }
 
-        return userRepository.save(user);
+        return userMapper.toUserResponseDto(userRepository.save(user));
     }
 
     @Override
@@ -93,12 +94,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User delete(Long id) {
+    public UserResponseDto delete(Long id) {
         User user = userRepository.findById(id).orElse(null);
         if (user != null) {
             userRepository.delete(user);
         }
-        return user;
+        return userMapper.toUserResponseDto(user);
     }
 
     @Override

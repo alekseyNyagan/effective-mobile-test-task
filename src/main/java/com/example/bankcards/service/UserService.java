@@ -1,6 +1,7 @@
 package com.example.bankcards.service;
 
 import com.example.bankcards.dto.UserDto;
+import com.example.bankcards.dto.UserResponseDto;
 import com.example.bankcards.entity.User;
 import com.example.bankcards.repository.UserFilter;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -11,17 +12,17 @@ import java.io.IOException;
 import java.util.List;
 
 public interface UserService {
-    Page<User> getAll(UserFilter filter, Pageable pageable);
+    Page<UserResponseDto> getAll(UserFilter filter, Pageable pageable);
 
-    UserDto getOne(Long id);
+    UserResponseDto getOne(Long id);
 
-    UserDto create(UserDto userDto);
+    UserResponseDto create(UserDto userDto);
 
-    User patch(Long id, JsonNode patchNode) throws IOException;
+    UserResponseDto patch(Long id, JsonNode patchNode) throws IOException;
 
     List<Long> patchMany(List<Long> ids, JsonNode patchNode) throws IOException;
 
-    User delete(Long id);
+    UserResponseDto delete(Long id);
 
     void deleteMany(List<Long> ids);
 }
