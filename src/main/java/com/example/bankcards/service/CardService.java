@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -22,9 +21,9 @@ public interface CardService {
 
     CardDto create(CardDto dto);
 
-    CardDto patch(Long id, JsonNode patchNode) throws IOException;
+    CardDto patch(Long id, JsonNode patchNode);
 
-    List<Long> patchMany(List<Long> ids, JsonNode patchNode) throws IOException;
+    List<Long> patchMany(List<Long> ids, JsonNode patchNode);
 
     CardDto delete(Long id);
 

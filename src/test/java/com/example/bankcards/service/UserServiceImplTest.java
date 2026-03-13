@@ -117,6 +117,7 @@ class UserServiceImplTest {
 
     @Test
     void create_success() {
+        when(roleRepository.findByNameIn(any())).thenReturn(Set.of());
         when(userMapper.toEntity(any(UserDto.class), any(), any())).thenReturn(user);
         when(userRepository.save(any(User.class))).thenReturn(user);
         when(userMapper.toUserResponseDto(any(User.class))).thenReturn(userResponseDto);
@@ -169,7 +170,7 @@ class UserServiceImplTest {
         List<Long> result = userService.patchMany(ids, patchNode);
 
         assertFalse(result.isEmpty());
-        assertEquals(1L, result.get(0));
+        assertEquals(1L, result.getFirst());
         verify(userRepository).saveAll(anyCollection());
     }
 
@@ -186,12 +187,10 @@ class UserServiceImplTest {
     }
 
     @Test
-    void delete_notFound_returnsNull() {
+    void delete_notFound_throwsException() {
         when(userRepository.findById(1L)).thenReturn(Optional.empty());
 
-        UserResponseDto result = userService.delete(1L);
-
-        assertNull(result);
+        assertThrows(ResponseStatusException.class, () -> userService.delete(1L));
         verify(userRepository, never()).delete(any(User.class));
     }
 

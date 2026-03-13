@@ -6,7 +6,6 @@ spring:
     url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB_NAME:bank_cards_db}
   jpa:
     open-in-view: false
-    show-sql: true
   liquibase:
     change-log: classpath:/db/migration/db.changelog-master.yml
 springdoc:
@@ -19,6 +18,7 @@ server:
 security:
   jwt:
     secret: ${JWT_SECRET:supersecretkeysupersecretkeysupersecretkey12}
+    expiration-ms: ${JWT_EXPIRATION_MS:3600000}
 
 app:
   crypto:

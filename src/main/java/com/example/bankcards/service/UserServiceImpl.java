@@ -2,6 +2,7 @@ package com.example.bankcards.service;
 
 import com.example.bankcards.dto.UserDto;
 import com.example.bankcards.dto.UserResponseDto;
+import com.example.bankcards.entity.Role;
 import com.example.bankcards.entity.User;
 import com.example.bankcards.mapper.UserMapper;
 import com.example.bankcards.repository.RoleRepository;
@@ -23,6 +24,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @Service
@@ -30,6 +32,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     public static final String JSON_PASSWORD_KEY = "password";
+    public static final String ENTITY_WITH_ID_S_NOT_FOUND_MESSAGE = "Entity with id `%s` not found";
 
     private final UserRepository userRepository;
 
@@ -51,12 +54,13 @@ public class UserServiceImpl implements UserService {
     public UserResponseDto getOne(Long id) {
         Optional<User> userOptional = userRepository.findById(id);
         return userMapper.toUserResponseDto(userOptional.orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Entity with id `%s` not found".formatted(id))));
+                new ResponseStatusException(HttpStatus.NOT_FOUND, ENTITY_WITH_ID_S_NOT_FOUND_MESSAGE.formatted(id))));
     }
 
     @Override
     public UserResponseDto create(UserDto userDto) {
-        User user = userMapper.toEntity(userDto, passwordEncoder, roleRepository);
+        Set<Role> roles = roleRepository.findByNameIn(userDto.roleNames());
+        User user = userMapper.toEntity(userDto, passwordEncoder, roles);
         userRepository.save(user);
         return userMapper.toUserResponseDto(user);
     }
@@ -64,7 +68,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto patch(Long id, JsonNode patchNode) throws IOException {
         User user = userRepository.findById(id).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Entity with id `%s` not found".formatted(id)));
+                new ResponseStatusException(HttpStatus.NOT_FOUND, ENTITY_WITH_ID_S_NOT_FOUND_MESSAGE.formatted(id)));
 
         if (patchNode.has(JSON_PASSWORD_KEY)) {
             user.setPassword(passwordEncoder.encode(patchNode.get(JSON_PASSWORD_KEY).asText()));
@@ -95,10 +99,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDto delete(Long id) {
-        User user = userRepository.findById(id).orElse(null);
-        if (user != null) {
-            userRepository.delete(user);
-        }
+        User user = userRepository.findById(id).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, ENTITY_WITH_ID_S_NOT_FOUND_MESSAGE.formatted(id)));
+        userRepository.delete(user);
         return userMapper.toUserResponseDto(user);
     }
 

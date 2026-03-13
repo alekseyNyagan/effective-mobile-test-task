@@ -1,9 +1,9 @@
 package com.example.bankcards.entity;
 
+import jakarta.persistence.*;
 import com.example.bankcards.converter.CardNumberConverter;
 import com.example.bankcards.converter.YearMonthConverter;
 import com.example.bankcards.entity.enums.CardStatus;
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.proxy.HibernateProxy;
@@ -37,7 +37,7 @@ public class Card {
     @Column(name = "status", nullable = false, length = 50)
     private CardStatus cardStatus;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name = "user_id")
     private User owner;
 

@@ -10,9 +10,11 @@ import java.util.Set;
 /**
  * DTO for {@link com.example.bankcards.entity.User}
  */
-public record UserDto(@Pattern(
-        regexp = "^\\+?[0-9]{10,15}$",
-        message = "Phone number must contain only digits (0–9), optionally starting with +, and be 10–15 characters long") String phoneNumber,
+public record UserDto(
+        @NotBlank(message = "Phone number cannot be empty")
+        @Pattern(
+                regexp = "^\\+?[0-9]{10,15}$",
+                message = "Phone number must contain only digits (0–9), optionally starting with +, and be 10–15 characters long") String phoneNumber,
                       @NotBlank(message = "Password cannot be empty")
                       @Size(min = 6, max = 100, message = "Password must be between 6 and 100 characters long") String password,
                       @NotBlank(message = "Name cannot be empty") @Size(max = 50, message = "Name must be at most 50 characters long") String name,

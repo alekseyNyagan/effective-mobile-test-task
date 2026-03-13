@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Transactional
@@ -45,11 +46,9 @@ public class TransactionServiceImpl implements TransactionService {
         }
 
         from.setMoneyAmount(from.getMoneyAmount().subtract(amount));
-
         to.setMoneyAmount(to.getMoneyAmount().add(amount));
 
-        cardRepository.save(from);
-        cardRepository.save(to);
+        cardRepository.saveAll(List.of(from, to));
 
         Transaction transaction = new Transaction(from, to, amount, LocalDateTime.now());
         transactionRepository.save(transaction);

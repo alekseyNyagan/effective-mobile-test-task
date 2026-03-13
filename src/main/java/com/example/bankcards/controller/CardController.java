@@ -17,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -51,12 +50,12 @@ public class CardController {
     }
 
     @PatchMapping("changeCardStatus/{id}")
-    public CardDto patch(@PathVariable Long id, @RequestBody JsonNode patchNode) throws IOException {
+    public CardDto patch(@PathVariable Long id, @RequestBody JsonNode patchNode) {
         return cardService.patch(id, patchNode);
     }
 
     @PatchMapping("changeManyCardStatus")
-    public List<Long> patchMany(@RequestParam List<Long> ids, @RequestBody JsonNode patchNode) throws IOException {
+    public List<Long> patchMany(@RequestParam List<Long> ids, @RequestBody JsonNode patchNode) {
         return cardService.patchMany(ids, patchNode);
     }
 

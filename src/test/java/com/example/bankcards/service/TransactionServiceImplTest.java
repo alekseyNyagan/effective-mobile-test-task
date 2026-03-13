@@ -3,7 +3,6 @@ package com.example.bankcards.service;
 import com.example.bankcards.entity.Card;
 import com.example.bankcards.entity.User;
 import com.example.bankcards.entity.enums.CardStatus;
-import com.example.bankcards.exception.BadRequestException;
 import com.example.bankcards.exception.ForbiddenOperationException;
 import com.example.bankcards.repository.CardRepository;
 import com.example.bankcards.repository.TransactionRepository;
@@ -16,10 +15,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
 class TransactionServiceImplTest {
@@ -64,7 +65,7 @@ class TransactionServiceImplTest {
 
         assertEquals(new BigDecimal("900.00"), fromCard.getMoneyAmount());
         assertEquals(new BigDecimal("600.00"), toCard.getMoneyAmount());
-        verify(cardRepository, times(2)).save(any(Card.class));
+        verify(cardRepository).saveAll(List.of(fromCard, toCard));
         verify(transactionRepository).save(any());
     }
 
@@ -79,7 +80,7 @@ class TransactionServiceImplTest {
         BigDecimal amount = new BigDecimal("100.00");
 
         assertThrows(ForbiddenOperationException.class, () -> transactionService.transferBetweenCards(1L, 2L, amount));
-        verify(cardRepository, never()).save(any(Card.class));
+        verify(cardRepository, never()).saveAll(any());
         verify(transactionRepository, never()).save(any());
     }
 
@@ -90,7 +91,7 @@ class TransactionServiceImplTest {
         BigDecimal amount = new BigDecimal("2000.00");
 
         assertThrows(ForbiddenOperationException.class, () -> transactionService.transferBetweenCards(1L, 2L, amount));
-        verify(cardRepository, never()).save(any(Card.class));
+        verify(cardRepository, never()).saveAll(any());
     }
 
     @Test
@@ -101,7 +102,7 @@ class TransactionServiceImplTest {
         BigDecimal amount = new BigDecimal("100.00");
 
         assertThrows(ForbiddenOperationException.class, () -> transactionService.transferBetweenCards(1L, 2L, amount));
-        verify(cardRepository, never()).save(any(Card.class));
+        verify(cardRepository, never()).saveAll(any());
     }
 
     @Test
@@ -110,6 +111,6 @@ class TransactionServiceImplTest {
         BigDecimal amount = new BigDecimal("100.00");
 
         assertThrows(EntityNotFoundException.class, () -> transactionService.transferBetweenCards(1L, 2L, amount));
-        verify(cardRepository, never()).save(any(Card.class));
+        verify(cardRepository, never()).saveAll(any());
     }
 }

@@ -59,7 +59,7 @@ public class CardServiceImpl implements CardService {
     @Override
     public Page<Card> getAllMyCards(CardFilter filter, Pageable pageable, User currentUser) {
         Specification<Card> spec = filter.toSpecification()
-                .and((root, query, cb) -> cb.equal(root.get("owner"), currentUser));
+                .and((root, _, cb) -> cb.equal(root.get("owner"), currentUser));
         return cardRepository.findAll(spec, pageable);
     }
 
@@ -112,10 +112,9 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public CardDto delete(Long id) {
-        Card card = cardRepository.findById(id).orElse(null);
-        if (card != null) {
-            cardRepository.delete(card);
-        }
+        Card card = cardRepository.findById(id).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Entity with id `%s` not found".formatted(id)));
+        cardRepository.delete(card);
         return cardMapper.toCardDto(card);
     }
 
